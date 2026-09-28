@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa1aecc4114bdf981041b66cf46d60, type: 3}
+  m_Name: NectoPlayableCharacterDatabase
+  m_EditorClassIdentifier: 
+  characters:
+  - id: player_001
+    displayName: "\u84BC\u771F"
+    prefab: {fileID: 5432473253826370877, guid: f1911cccb45944169b0f1989c0890903, type: 3}
+    iconPrefab: {fileID: 8628973669478409246, guid: 12b84a8ad7a33406581a9d68afdb2c39, type: 3}
+  - id: player_002
+    displayName: "\u767D\u84EE"
+    prefab: {fileID: 1300800860940015358, guid: d141e3d3bed334ab58caa9937479f5a2, type: 3}
+    iconPrefab: {fileID: 8628973669478409246, guid: bcb49b417d27a4919ab065aca97cd735, type: 3}
+  - id: player_003
+    displayName: "\u9ED2\u66DC"
+    prefab: {fileID: 5833306801825240098, guid: c5a022ea96e5f4388a08b2108ad5d1f9, type: 3}
+    iconPrefab: {fileID: 8628973669478409246, guid: fec68a45500854832b75116eb60241f4, type: 3}
+  - id: player_004
+    displayName: "\u7D05\u7FBD"
+    prefab: {fileID: 6471787580886896112, guid: 4a98e44b03a0441e4818adfc54780141, type: 3}
+    iconPrefab: {fileID: 8628973669478409246, guid: 2a506334497cd4645b0677f407c92774, type: 3}
+  - id: player_005
+    displayName: "\u7384\u7259"
+    prefab: {fileID: 673923801755092995, guid: b0f3e246a863346689facfb68fb93826, type: 3}
+    iconPrefab: {fileID: 8628973669478409246, guid: 9396ae4ba70b244eab3f541f403a83d8, type: 3}
+  - id: player_006
+    displayName: "\u7D2B\u82D1"
+    prefab: {fileID: 6052960153984891548, guid: 2db7abfbdf89a4b669bb1a863126970a, type: 3}
+    iconPrefab: {fileID: 8628973669478409246, guid: da8aa832876e6455bb2f60034fa3a6e5, type: 3}
+  - id: player_007
+    displayName: "\u96F7\u83EF"
+    prefab: {fileID: 72944053469169209, guid: e907772ef05da43a19caf0658dcd097c, type: 3}
+    iconPrefab: {fileID: 8628973669478409246, guid: 91b8c4e6d2f7401a8c3e5b7d9f024681, type: 3}

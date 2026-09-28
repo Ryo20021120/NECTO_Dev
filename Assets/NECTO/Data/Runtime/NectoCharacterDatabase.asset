@@ -1,0 +1,1048 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a192e02d2264489ab340c350f076484, type: 3}
+  m_Name: NectoCharacterDatabase
+  m_EditorClassIdentifier: 
+  masterVersion: 1.1.0
+  importedAt: 2026-09-23 22:25:56
+  players:
+  - displayName: "\u84BC\u771F"
+    id: player_001
+    description: "\u5996\u306B\u6191\u4F9D\u3057\u3066\u6226\u3046\u4E3B\u4EBA\u516C"
+    category: 1
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Player01
+    modelName: Player01
+    avatarName: Player01
+    animatorControllerName: Player_Main
+    prefab: {fileID: 5432473253826370877, guid: f1911cccb45944169b0f1989c0890903, type: 3}
+    animatorController: {fileID: 9100000, guid: 5caf4642aa0354e46906ad058cfc5c2f, type: 2}
+    iconPrefab: {fileID: 8628973669478409246, guid: 12b84a8ad7a33406581a9d68afdb2c39, type: 3}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: "\u76F8\u64B2\u30E2\u30FC\u30C9\u3067\u306F Player_Sumo \u306B\u5207\u308A\u66FF\u3048"
+  - displayName: "\u767D\u84EE"
+    id: player_002
+    description: "\u6191\u4F9D\u306E\u529B\u3092\u53D7\u3051\u7D99\u3044\u3060\u3082\u3046\u4E00\u4EBA\u306E\u4E3B\u4EBA\u516C"
+    category: 1
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Player02
+    modelName: Player02
+    avatarName: Player02
+    animatorControllerName: Player_Main
+    prefab: {fileID: 1300800860940015358, guid: d141e3d3bed334ab58caa9937479f5a2, type: 3}
+    animatorController: {fileID: 9100000, guid: 5caf4642aa0354e46906ad058cfc5c2f, type: 2}
+    iconPrefab: {fileID: 8628973669478409246, guid: bcb49b417d27a4919ab065aca97cd735, type: 3}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u9ED2\u66DC"
+    id: player_003
+    description: "\u9078\u629E\u53EF\u80FD\u306A\u4E3B\u4EBA\u516C\u5019\u88DC"
+    category: 1
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Player03
+    modelName: Player03
+    avatarName: Player03
+    animatorControllerName: Player_Main
+    prefab: {fileID: 5833306801825240098, guid: c5a022ea96e5f4388a08b2108ad5d1f9, type: 3}
+    animatorController: {fileID: 9100000, guid: 5caf4642aa0354e46906ad058cfc5c2f, type: 2}
+    iconPrefab: {fileID: 8628973669478409246, guid: fec68a45500854832b75116eb60241f4, type: 3}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u7D05\u7FBD"
+    id: player_004
+    description: "\u9078\u629E\u53EF\u80FD\u306A\u4E3B\u4EBA\u516C\u5019\u88DC"
+    category: 1
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Player04
+    modelName: Player04
+    avatarName: Player04
+    animatorControllerName: Player_Main
+    prefab: {fileID: 6471787580886896112, guid: 4a98e44b03a0441e4818adfc54780141, type: 3}
+    animatorController: {fileID: 9100000, guid: 5caf4642aa0354e46906ad058cfc5c2f, type: 2}
+    iconPrefab: {fileID: 8628973669478409246, guid: 2a506334497cd4645b0677f407c92774, type: 3}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u7384\u7259"
+    id: player_005
+    description: "\u9078\u629E\u53EF\u80FD\u306A\u4E3B\u4EBA\u516C\u5019\u88DC"
+    category: 1
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Player05
+    modelName: Player05
+    avatarName: Player05
+    animatorControllerName: Player_Main
+    prefab: {fileID: 673923801755092995, guid: b0f3e246a863346689facfb68fb93826, type: 3}
+    animatorController: {fileID: 9100000, guid: 5caf4642aa0354e46906ad058cfc5c2f, type: 2}
+    iconPrefab: {fileID: 8628973669478409246, guid: 9396ae4ba70b244eab3f541f403a83d8, type: 3}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u7D2B\u82D1"
+    id: player_006
+    description: "\u9078\u629E\u53EF\u80FD\u306A\u4E3B\u4EBA\u516C\u5019\u88DC"
+    category: 1
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Player06
+    modelName: Player06
+    avatarName: Player06
+    animatorControllerName: Player_Main
+    prefab: {fileID: 6052960153984891548, guid: 2db7abfbdf89a4b669bb1a863126970a, type: 3}
+    animatorController: {fileID: 9100000, guid: 5caf4642aa0354e46906ad058cfc5c2f, type: 2}
+    iconPrefab: {fileID: 8628973669478409246, guid: da8aa832876e6455bb2f60034fa3a6e5, type: 3}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u96F7\u83EF"
+    id: player_007
+    description: "\u9078\u629E\u53EF\u80FD\u306A\u4E3B\u4EBA\u516C\u5019\u88DC"
+    category: 1
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Player07
+    modelName: Player07
+    avatarName: Player07
+    animatorControllerName: Player_Main
+    prefab: {fileID: 72944053469169209, guid: e907772ef05da43a19caf0658dcd097c, type: 3}
+    animatorController: {fileID: 9100000, guid: 5caf4642aa0354e46906ad058cfc5c2f, type: 2}
+    iconPrefab: {fileID: 8628973669478409246, guid: 91b8c4e6d2f7401a8c3e5b7d9f024681, type: 3}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  npcs:
+  - displayName: "\u793E\u306E\u5DEB\u5973"
+    id: npc_001
+    description: "\u4E3B\u4EBA\u516C\u306B\u6191\u4F9D\u306E\u529B\u3092\u6388\u3051\u308B\u5DEB\u5973"
+    category: 2
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Npc01
+    modelName: Npc01
+    avatarName: Npc01
+    animatorControllerName: Npc
+    prefab: {fileID: 1169990788915671715, guid: fc25d120a8a1d47138a8e0d401a2eb70, type: 3}
+    animatorController: {fileID: 9100000, guid: 644568b98ece5454fb86597ccd0b4e2a, type: 2}
+    iconPrefab: {fileID: 0}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u6751\u9577"
+    id: npc_002
+    description: "\u6751\u306E\u4E8B\u60C5\u3092\u6559\u3048\u3066\u304F\u308C\u308B\u8001\u4EBA"
+    category: 2
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 0
+    maxHp: 0
+    maxMp: 0
+    attack: 0
+    defense: 0
+    battleSpeed: 0
+    moveSpeed: 5
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds: []
+    prefabName: Npc02
+    modelName: Npc02
+    avatarName: Npc02
+    animatorControllerName: Npc
+    prefab: {fileID: 7660374690281905821, guid: 5cbd480790b0c4b0c885d807ed2cfa45, type: 3}
+    animatorController: {fileID: 9100000, guid: 644568b98ece5454fb86597ccd0b4e2a, type: 2}
+    iconPrefab: {fileID: 0}
+    implState: 2
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  monsters:
+  - displayName: "\u84BC\u7CBE"
+    id: monster_001
+    description: "\u6C34\u3092\u307E\u3068\u3063\u305F\u84BC\u3044\u7CBE\u970A"
+    category: 3
+    affiliation: 1
+    partySlot: 1
+    element: 2
+    resistance: 2
+    weakness: 4
+    statusSkill: 0
+    level: 5
+    maxHp: 82
+    maxMp: 28
+    attack: 19
+    defense: 11
+    battleSpeed: 17
+    moveSpeed: 3
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_001
+    - skill_003
+    - skill_015
+    prefabName: Monster_BlueCreature
+    modelName: Monster_BlueCreature
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 1304615189944229153, guid: f178bf648815844aa9a6e9bcbb2afc13, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: a7eb2b7967f33463fa26fe0f4c3b12a6, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u767D\u864E"
+    id: monster_002
+    description: "\u786C\u3044\u93A7\u3092\u7740\u305F\u732B\u306E\u5996"
+    category: 3
+    affiliation: 1
+    partySlot: 2
+    element: 4
+    resistance: 4
+    weakness: 3
+    statusSkill: 1
+    level: 5
+    maxHp: 110
+    maxMp: 18
+    attack: 16
+    defense: 20
+    battleSpeed: 8
+    moveSpeed: 3
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_018
+    - skill_022
+    prefabName: Monster_ArmoredCat
+    modelName: Monster_ArmoredCat
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 5070841513590508458, guid: c16f96d8fbb9441f49f77c049ae1677c, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 16e925b8fe02746a89c79ceb18fc6dde, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u5996\u9B54\u30FB\u4E09"
+    id: monster_003
+    description: "\u98A8\u3092\u5207\u3063\u3066\u8DF3\u306D\u308B\u9577\u8033\u306E\u5996"
+    category: 3
+    affiliation: 1
+    partySlot: 3
+    element: 3
+    resistance: 3
+    weakness: 1
+    statusSkill: 0
+    level: 4
+    maxHp: 70
+    maxMp: 34
+    attack: 17
+    defense: 9
+    battleSpeed: 24
+    moveSpeed: 3
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_023
+    - skill_024
+    - skill_025
+    prefabName: Monster_Bunny
+    modelName: Monster_Bunny
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 3317484399020700612, guid: f034298854f4f439d87e7e8b02ba50a4, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 69f1e5e73a6c34dd6994c3f7cde49843, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u98DB\u9B5A"
+    id: monster_004
+    description: "\u5B99\u3092\u6CF3\u3050\u9B5A\u306E\u5996"
+    category: 3
+    affiliation: 2
+    partySlot: 1
+    element: 2
+    resistance: 2
+    weakness: 4
+    statusSkill: 0
+    level: 4
+    maxHp: 74
+    maxMp: 20
+    attack: 16
+    defense: 9
+    battleSpeed: 14
+    moveSpeed: 3
+    exp: 12
+    gold: 6
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_001
+    - skill_003
+    - skill_015
+    prefabName: Monster_FlyingFish
+    modelName: Monster_FlyingFish
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 4674379896360635634, guid: 61e100e5e4f70404c8ecfd17c66c97e6, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: a9cb0969c26e549dbad0fc7e677fe00a, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u9727\u306E\u5DDD\u5CB8"
+    notes: 
+  - displayName: "\u9ED2\u7259"
+    id: monster_005
+    description: "\u96F7\u96F2\u3068\u3068\u3082\u306B\u73FE\u308C\u308B\u8759\u8760"
+    category: 3
+    affiliation: 2
+    partySlot: 2
+    element: 5
+    resistance: 5
+    weakness: 3
+    statusSkill: 1
+    level: 6
+    maxHp: 125
+    maxMp: 20
+    attack: 20
+    defense: 23
+    battleSpeed: 7
+    moveSpeed: 3
+    exp: 20
+    gold: 10
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_027
+    - skill_029
+    prefabName: Monster_Bat
+    modelName: Monster_Bat
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 688290071792920403, guid: 6ff2dc7f524c84a6085a8e9bbf12cd5a, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: f3db9df27df1b44f8b6ef39839049ab5, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u96F7\u96F2\u306E\u4E18"
+    notes: 
+  - displayName: "\u706B\u72D0"
+    id: monster_006
+    description: "\u708E\u3092\u307E\u3068\u3063\u305F\u72D0"
+    category: 3
+    affiliation: 2
+    partySlot: 3
+    element: 1
+    resistance: 1
+    weakness: 2
+    statusSkill: 0
+    level: 5
+    maxHp: 78
+    maxMp: 32
+    attack: 18
+    defense: 10
+    battleSpeed: 19
+    moveSpeed: 3
+    exp: 13
+    gold: 6
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_009
+    - skill_011
+    - skill_013
+    prefabName: Monster_FireFox
+    modelName: Monster_FireFox
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 5458671019560591106, guid: 4b48a7b73fb474b03a142e351db3100e, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: d20cbe1ef33184c80beb453cd9eced2e, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u713C\u3051\u8DE1\u306E\u8857\u9053"
+    notes: 
+  - displayName: "\u98A8\u514E"
+    id: monster_007
+    description: "\u98A8\u306E\u3088\u3046\u306B\u99C6\u3051\u308B\u5FCD\u3073\u306E\u514E"
+    category: 3
+    affiliation: 3
+    partySlot: 1
+    element: 3
+    resistance: 3
+    weakness: 1
+    statusSkill: 0
+    level: 3
+    maxHp: 66
+    maxMp: 20
+    attack: 18
+    defense: 9
+    battleSpeed: 22
+    moveSpeed: 3
+    exp: 8
+    gold: 4
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_023
+    - skill_024
+    - skill_025
+    prefabName: Monster_BunnyNinja
+    modelName: Monster_BunnyNinja
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 5064156308880958817, guid: 7864cea1fe05d465cbe43aba1e89e819, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: b2f1667d3730c48fb8df32495a48b042, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u7D05\u8776"
+    id: monster_008
+    description: "\u9C57\u7C89\u3092\u6492\u304F\u7D05\u3044\u8776"
+    category: 3
+    affiliation: 3
+    partySlot: 2
+    element: 3
+    resistance: 3
+    weakness: 2
+    statusSkill: 1
+    level: 4
+    maxHp: 88
+    maxMp: 30
+    attack: 20
+    defense: 15
+    battleSpeed: 12
+    moveSpeed: 3
+    exp: 10
+    gold: 5
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_023
+    - skill_024
+    - skill_025
+    prefabName: Monster_RedButterfly
+    modelName: Monster_RedButterfly
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 1296755590306420235, guid: da89d5982f5db46c595b9c328b4b0af4, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: c8693f342b53746558830694dda9bc82, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u5996\u9B54\u30FB\u4E00"
+    id: monster_009
+    description: "\u30D5\u30FC\u30C9\u3092\u88AB\u3063\u305F\u5F77\u5FA8\u3046\u970A"
+    category: 3
+    affiliation: 3
+    partySlot: 3
+    element: 0
+    resistance: 0
+    weakness: 1
+    statusSkill: 0
+    level: 2
+    maxHp: 52
+    maxMp: 38
+    attack: 12
+    defense: 8
+    battleSpeed: 18
+    moveSpeed: 3
+    exp: 7
+    gold: 3
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_005
+    - skill_007
+    prefabName: Monster_HoodedGhost
+    modelName: Monster_HoodedGhost
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 845745591946777967, guid: b7f61fcf2213c47f8aaa8cee5abc8127, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 68ef97e75d27447c8a70906e215b9fd4, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: 
+    notes: 
+  - displayName: "\u732B\u59EB"
+    id: monster_010
+    description: "\u30D5\u30A3\u30FC\u30EB\u30C9\u306E\u7DF4\u7FD2\u7528\u30E2\u30F3\u30B9\u30BF\u30FC"
+    category: 3
+    affiliation: 2
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 1
+    maxHp: 45
+    maxMp: 20
+    attack: 13
+    defense: 8
+    battleSpeed: 10
+    moveSpeed: 3
+    exp: 0
+    gold: 0
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_005
+    - skill_007
+    prefabName: Monster_Humanoid_01
+    modelName: Monster_Humanoid_01
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 9042000650973555417, guid: db6729e297f3642eb922ed78c1f1365a, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 1bbec8e8ffa1242ed93974e86b60f71a, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u30D5\u30A3\u30FC\u30EB\u30C9"
+    notes: 
+  - displayName: "\u9752\u9F8D"
+    id: monster_011
+    description: "\u84BC\u304D\u9C57\u306E\u5927\u9F8D"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 2
+    resistance: 2
+    weakness: 0
+    statusSkill: 0
+    level: 35
+    maxHp: 1800
+    maxMp: 120
+    attack: 85
+    defense: 55
+    battleSpeed: 40
+    moveSpeed: 3
+    exp: 2000
+    gold: 1000
+    dropItems:
+    - "\u9F8D\u306E\u9006\u9C57"
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_001
+    - skill_003
+    - skill_015
+    prefabName: Monster_BlueDragon
+    modelName: Monster_BlueDragon
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 4819280629424449363, guid: bec117174cdcc4e909f99f3474e3ddf3, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 1a51f47942b2f4cbb9375d4e0bb5da64, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u5927\u6CBC\u306E\u5E95"
+    notes: 
+  - displayName: "\u708E\u9F8D"
+    id: monster_012
+    description: "\u5168\u8EAB\u304C\u708E\u3067\u8986\u308F\u308C\u305F\u9F8D"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 1
+    resistance: 1
+    weakness: 0
+    statusSkill: 0
+    level: 18
+    maxHp: 420
+    maxMp: 60
+    attack: 46
+    defense: 24
+    battleSpeed: 30
+    moveSpeed: 3
+    exp: 320
+    gold: 160
+    dropItems:
+    - "\u708E\u306E\u9C57"
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_009
+    - skill_011
+    - skill_013
+    prefabName: Monster_FieryDragon
+    modelName: Monster_FieryDragon
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 7798004951046693927, guid: 2e283fc97c1f8498c9477b939a0cda6b, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: f91038d0f5d9a47d5bec6acfbae8ce5f, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u706B\u53E3\u6D1E\u7A9F"
+    notes: 
+  - displayName: "\u98DB\u9F8D"
+    id: monster_013
+    description: "\u65AD\u5D16\u306E\u7A7A\u3092\u821E\u3046\u98DB\u9F8D"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 3
+    resistance: 3
+    weakness: 0
+    statusSkill: 0
+    level: 22
+    maxHp: 520
+    maxMp: 50
+    attack: 50
+    defense: 32
+    battleSpeed: 42
+    moveSpeed: 3
+    exp: 420
+    gold: 210
+    dropItems:
+    - "\u9F8D\u306E\u7FFC\u819C"
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_023
+    - skill_024
+    - skill_025
+    prefabName: Monster_Dragon
+    modelName: Monster_Dragon
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 2672004760147314926, guid: c3bf636925a4f495283221e2373b6395, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: ac383fd281e0e4487990372527ca84c4, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u65AD\u5D16\u306E\u7A7A"
+    notes: 
+  - displayName: "\u9F8D\u59EB"
+    id: monster_014
+    description: "\u96F7\u3092\u5F93\u3048\u308B\u9F8D\u306E\u59EB"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 5
+    resistance: 5
+    weakness: 0
+    statusSkill: 0
+    level: 28
+    maxHp: 640
+    maxMp: 80
+    attack: 62
+    defense: 36
+    battleSpeed: 38
+    moveSpeed: 3
+    exp: 580
+    gold: 290
+    dropItems:
+    - "\u9F8D\u59EB\u306E\u52FE\u7389"
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_027
+    - skill_029
+    prefabName: Monster_DragonGirl
+    modelName: Monster_DragonGirl
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 1002604760708732444, guid: 54c68419b964c467da31f5b39e25a62e, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: c2d56c18a12be452bafdb1023a5e868d, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u96F7\u795E\u306E\u7960"
+    notes: 
+  - displayName: "\u5996\u9B54\u30FB\u56DB"
+    id: monster_015
+    description: "\u708E\u3092\u7E8F\u3046\u6700\u5F37\u306E\u9B3C"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 1
+    resistance: 1
+    weakness: 0
+    statusSkill: 0
+    level: 45
+    maxHp: 2600
+    maxMp: 150
+    attack: 110
+    defense: 70
+    battleSpeed: 50
+    moveSpeed: 3
+    exp: 3500
+    gold: 1750
+    dropItems:
+    - "\u9B3C\u795E\u306E\u89D2"
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_009
+    - skill_011
+    - skill_013
+    prefabName: Monster_Demon
+    modelName: Monster_Demon
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 8628973669478409246, guid: 73f6b2b3b01bb45d4bdb42ce2b614cd4, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 1535104779099907160, guid: d2604a1a9eb99492392d52f5a9b66bac, type: 3}
+    implState: 1
+    enabled: 0
+    spawnLocation: "\u7126\u71B1\u306E\u9B54\u5BAE"
+    notes: 
+  - displayName: "\u8D64\u6B66\u8005"
+    id: monster_016
+    description: "\u6731\u5857\u308A\u306E\u93A7\u3092\u7E8F\u3063\u305F\u6B66\u8005"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 0
+    resistance: 0
+    weakness: 0
+    statusSkill: 0
+    level: 17
+    maxHp: 360
+    maxMp: 20
+    attack: 44
+    defense: 20
+    battleSpeed: 26
+    moveSpeed: 3
+    exp: 300
+    gold: 150
+    dropItems:
+    - "\u9306\u3073\u305F\u5200"
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_005
+    - skill_007
+    prefabName: Monster_RedSamurai
+    modelName: Monster_RedSamurai
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 6199379217831463276, guid: 6039b98ed334d499b8bd326ec812ed6c, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 70611e6102a1a4befa4be3a65e112297, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u53E4\u6226\u5834"
+    notes: 
+  - displayName: "\u4EBA\u578B\u5996"
+    id: monster_017
+    description: "\u63A1\u77F3\u5834\u8DE1\u306B\u68F2\u307F\u3064\u3044\u305F\u5996\u9B54"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 4
+    resistance: 4
+    weakness: 0
+    statusSkill: 0
+    level: 10
+    maxHp: 320
+    maxMp: 40
+    attack: 28
+    defense: 30
+    battleSpeed: 12
+    moveSpeed: 3
+    exp: 150
+    gold: 75
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_018
+    - skill_022
+    - skill_021
+    prefabName: Monster_Creature_01
+    modelName: Monster_Creature_01
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 3373670587309082731, guid: 6f9d6c63f62324e0aa2cb66b5aef462e, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 57cc53e7cf04b4ec2a7f945cf382bc0d, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u63A1\u77F3\u5834\u8DE1"
+    notes: 
+  - displayName: "\u5F71\u970A"
+    id: monster_018
+    description: "\u5751\u9053\u306E\u5965\u306B\u6F5C\u3080\u5996\u9B54"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 4
+    resistance: 4
+    weakness: 0
+    statusSkill: 0
+    level: 14
+    maxHp: 300
+    maxMp: 40
+    attack: 40
+    defense: 18
+    battleSpeed: 20
+    moveSpeed: 3
+    exp: 230
+    gold: 115
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_018
+    - skill_022
+    - skill_021
+    prefabName: Monster_Creature_02
+    modelName: Monster_Creature_02
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 6622905895617779395, guid: ee8f7006781fb4705b4bd19b368211da, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: c76a8d9c75e0b45f686d400b8f272c66, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u5730\u4E0B\u5751\u9053"
+    notes: 
+  - displayName: "\u5996\u9B54\u30FB\u4E8C"
+    id: monster_019
+    description: "\u7FA4\u308C\u3067\u8972\u3044\u304B\u304B\u308B\u5996\u9B54"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 4
+    resistance: 4
+    weakness: 0
+    statusSkill: 0
+    level: 16
+    maxHp: 380
+    maxMp: 24
+    attack: 42
+    defense: 22
+    battleSpeed: 22
+    moveSpeed: 3
+    exp: 280
+    gold: 140
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_018
+    - skill_022
+    - skill_021
+    prefabName: Monster_Creature_03
+    modelName: Monster_Creature_03
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 7520880939007371886, guid: 7f50e8b3b44724f92afc5323b5a3109c, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: 91c8ca2a4d37f4d16a3d6dc11acbacc0, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u5730\u4E0B\u5751\u9053"
+    notes: 
+  - displayName: "\u93A7\u732B"
+    id: monster_020
+    description: "\u53C2\u9053\u3092\u5B88\u308B\u52D5\u304F\u4EBA\u5F62"
+    category: 3
+    affiliation: 0
+    partySlot: 0
+    element: 4
+    resistance: 4
+    weakness: 0
+    statusSkill: 0
+    level: 12
+    maxHp: 280
+    maxMp: 40
+    attack: 32
+    defense: 26
+    battleSpeed: 10
+    moveSpeed: 3
+    exp: 180
+    gold: 90
+    dropItems: []
+    skillIds:
+    - skill_002
+    - skill_004
+    - skill_018
+    - skill_022
+    - skill_021
+    prefabName: Monster_CreatureFigurine
+    modelName: Monster_CreatureFigurine
+    avatarName: 
+    animatorControllerName: 
+    prefab: {fileID: 4470098458769643189, guid: 57f5bb8d5d1fb4f9fbf453f12a907f1a, type: 3}
+    animatorController: {fileID: 0}
+    iconPrefab: {fileID: 8628973669478409246, guid: e4cc361b6c6504c3484912296e59a2ac, type: 3}
+    implState: 1
+    enabled: 1
+    spawnLocation: "\u5965\u5BAE\u306E\u53C2\u9053"
+    notes: 
+  others: []

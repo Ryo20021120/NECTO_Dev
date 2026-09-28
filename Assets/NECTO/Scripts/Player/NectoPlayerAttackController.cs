@@ -1,0 +1,335 @@
+using System.Text;
+using Necto.Data;
+using Necto.Skills;
+using Necto.UI;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Necto.Player
+{
+    /// <summary>
+    /// A/Y/Bの入力列から、現在選択中のモンスターが持つ技を決定する。
+    /// 技IDとStateMachineBehaviourを照合し、対応するAnimator Stateを直接再生する。
+    /// </summary>
+    [DisallowMultipleComponent]
+    [AddComponentMenu("NECTO/Player/Player Attack Controller")]
+    public sealed class NectoPlayerAttackController : MonoBehaviour
+    {
+        [Header("デバッグ用データ")]
+        [SerializeField] private NectoMonsterSkillDatabase monsterSkillDatabase;
+
+        [Header("コマンド受付")]
+        [Tooltip("次のボタン入力を待つ時間。")]
+        [Min(0.05f)]
+        [SerializeField] private float commandTimeout = 0.55f;
+
+        [Header("Animator直接再生")]
+        [Tooltip("攻撃ステートへ切り替える時間。")]
+        [Min(0f)]
+        [SerializeField] private float attackFadeDuration = 0.08f;
+
+        [Tooltip("攻撃終了後に戻るステート。")]
+        [SerializeField] private string locomotionStateName = "Base Layer.Locomotion";
+
+        [Tooltip("次の攻撃を予約済みの場合、現在のモーションのどの位置で次段へ進むか。")]
+        [Range(0.1f, 0.95f)]
+        [SerializeField] private float comboAdvanceNormalizedTime = 0.55f;
+
+        [Header("参照（通常は自動取得）")]
+        [SerializeField] private Animator animator;
+
+        [Header("検証用")]
+        [Tooltip("攻撃入力からAnimator再生判定までをConsoleに表示します。")]
+        [SerializeField] private bool showDebugLog = true;
+
+        private readonly StringBuilder commandBuffer = new StringBuilder(4);
+        private float lastInputTime = float.NegativeInfinity;
+        private int playingAttackStateHash;
+        private bool waitingForAttackState;
+        private bool playingAttack;
+        private string activeSkillId = string.Empty;
+        private int[] activeComboStateHashes = new int[0];
+        private int activeComboIndex;
+        private int queuedComboSteps;
+
+        public string LastCommand { get; private set; } = string.Empty;
+        public string LastSkillId { get; private set; } = string.Empty;
+
+        private void Awake()
+        {
+            RefreshAnimator();
+        }
+
+        private void Update()
+        {
+            if (!IsAnimatorActive()) RefreshAnimator();
+
+            UpdateDirectAttackPlayback();
+
+            if (Time.unscaledTime - lastInputTime > commandTimeout)
+                commandBuffer.Clear();
+
+            if (NectoFieldPartyHud.InputCaptured || NectoPlayerDodgeController.IsDodging) return;
+
+            Gamepad gamepad = Gamepad.current;
+            if (gamepad == null) return;
+
+            if (UsesNintendoButtonLayout(gamepad))
+            {
+                // Nintendo Switch: 右=A / 下=B / 上=X / 左=Y
+                if (gamepad.buttonEast.wasPressedThisFrame) PushCommand('A');
+                if (gamepad.buttonSouth.wasPressedThisFrame) PushCommand('B');
+                if (gamepad.buttonNorth.wasPressedThisFrame) PushCommand('X');
+                if (gamepad.buttonWest.wasPressedThisFrame) PushCommand('Y');
+            }
+            else
+            {
+                // Xbox: 下=A / 右=B / 左=X / 上=Y
+                if (gamepad.buttonSouth.wasPressedThisFrame) PushCommand('A');
+                if (gamepad.buttonEast.wasPressedThisFrame) PushCommand('B');
+                if (gamepad.buttonWest.wasPressedThisFrame) PushCommand('X');
+                if (gamepad.buttonNorth.wasPressedThisFrame) PushCommand('Y');
+            }
+        }
+
+        private static bool UsesNintendoButtonLayout(Gamepad gamepad)
+        {
+            if (gamepad == null) return false;
+
+            string deviceText = string.Concat(
+                gamepad.layout, " ",
+                gamepad.displayName, " ",
+                gamepad.description.manufacturer, " ",
+                gamepad.description.product).ToLowerInvariant();
+
+            return deviceText.Contains("nintendo") ||
+                   deviceText.Contains("switch") ||
+                   deviceText.Contains("joy-con") ||
+                   deviceText.Contains("pro controller");
+        }
+
+        private void PushCommand(char button)
+        {
+            Log($"① 入力検出: {button}");
+
+            lastInputTime = Time.unscaledTime;
+            commandBuffer.Append(button);
+            if (commandBuffer.Length > 4)
+                commandBuffer.Remove(0, commandBuffer.Length - 4);
+
+            Log($"② 現在の入力列: {commandBuffer}");
+
+            NectoMonsterSkillEntry monster = GetActiveMonster();
+            if (monster == null)
+            {
+                LogError("③ 失敗: 選択中のモンスターまたはデータが取得できません。");
+                return;
+            }
+
+            Log($"③ モンスター取得成功: {NectoPartyRoster.ActiveMonsterId}");
+
+            NectoDebugSkillData skill = FindLongestMatchingSuffix(monster);
+            if (skill == null)
+            {
+                LogError($"④ 失敗: 入力 '{commandBuffer}' に一致する技がありません。");
+                return;
+            }
+
+            LastCommand = skill.Command;
+            LastSkillId = skill.SkillId;
+            Log($"④ 技検索成功: {skill.DisplayName} / ID={skill.SkillId} / Command={skill.Command}");
+            PlaySkill(skill);
+        }
+
+        private NectoMonsterSkillEntry GetActiveMonster()
+        {
+            if (monsterSkillDatabase == null)
+            {
+                Debug.LogWarning("NECTO: Player Attack ControllerにMonster Skill Databaseが登録されていません。", this);
+                return null;
+            }
+
+            string monsterId = NectoPartyRoster.ActiveMonsterId;
+            NectoMonsterSkillEntry monster = monsterSkillDatabase.Find(monsterId);
+            if (monster == null)
+                Debug.LogWarning($"NECTO: 選択中のモンスター '{monsterId}' がデバッグデータにありません。", this);
+            return monster;
+        }
+
+        private NectoDebugSkillData FindLongestMatchingSuffix(NectoMonsterSkillEntry monster)
+        {
+            string entered = commandBuffer.ToString();
+            NectoDebugSkillData best = null;
+
+            foreach (NectoDebugSkillData skill in monster.Skills)
+            {
+                if (skill == null || string.IsNullOrWhiteSpace(skill.Command)) continue;
+                if (!entered.EndsWith(skill.Command, System.StringComparison.OrdinalIgnoreCase)) continue;
+                if (best == null || skill.Command.Length > best.Command.Length) best = skill;
+            }
+
+            return best;
+        }
+
+        private void PlaySkill(NectoDebugSkillData skill)
+        {
+            if (animator == null)
+            {
+                LogError("⑤ 失敗: 有効なAnimatorが見つかりません。");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(skill.SkillId))
+            {
+                LogError("⑤ 失敗: Skill Dataの技IDが空です。");
+                return;
+            }
+
+            Log($"⑤ Animator取得成功: {animator.name} / Controller={animator.runtimeAnimatorController?.name}");
+
+            NectoSkillMasterStateSMB registeredBehaviour = FindRegisteredSkillBehaviour(skill.SkillId);
+            bool hasRegisteredStateId = registeredBehaviour != null;
+            Log($"⑥ StateMachineBehaviour ID照合: {skill.SkillId} = {(hasRegisteredStateId ? "一致" : "見つからない")}");
+            if (!hasRegisteredStateId)
+            {
+                Debug.LogWarning($"NECTO: Animator内に技ID '{skill.SkillId}' のNectoSkillMasterStateSMBが見つかりません。", animator);
+                return;
+            }
+
+            string stateName = registeredBehaviour.AnimatorStateName;
+            string[] registeredComboStates = registeredBehaviour.ComboAnimatorStateNames;
+            bool hasComboStates = registeredComboStates != null && registeredComboStates.Length > 0;
+
+            if (playingAttack && activeSkillId == skill.SkillId && activeComboStateHashes.Length > 1)
+            {
+                int remainingSteps = activeComboStateHashes.Length - 1 - activeComboIndex - queuedComboSteps;
+                if (remainingSteps > 0)
+                {
+                    queuedComboSteps++;
+                    Log($"⑧ コンボ先行入力受付: 次は{activeComboIndex + queuedComboSteps + 1}段目");
+                }
+                else
+                {
+                    Log("⑧ 最終段まで入力予約済みです。");
+                }
+                commandBuffer.Clear();
+                return;
+            }
+
+            if (!hasComboStates && string.IsNullOrWhiteSpace(stateName))
+            {
+                LogError($"⑦ 再生失敗: ID '{skill.SkillId}' のBehaviourにAnimator State Nameが未入力です。");
+                return;
+            }
+
+            string[] playbackStates = hasComboStates ? registeredComboStates : new[] { stateName };
+            int[] playbackHashes = new int[playbackStates.Length];
+            for (int i = 0; i < playbackStates.Length; i++)
+            {
+                playbackHashes[i] = Animator.StringToHash(playbackStates[i]);
+                if (string.IsNullOrWhiteSpace(playbackStates[i]) || !animator.HasState(0, playbackHashes[i]))
+                {
+                    LogError($"⑦ 再生失敗: Animatorにステート '{playbackStates[i]}' が見つかりません。");
+                    return;
+                }
+            }
+
+            activeSkillId = skill.SkillId;
+            activeComboStateHashes = playbackHashes;
+            activeComboIndex = 0;
+            queuedComboSteps = 0;
+            Log($"⑦ 直接再生: {playbackStates[0]} / 全{playbackStates.Length}段");
+            animator.CrossFadeInFixedTime(playbackHashes[0], attackFadeDuration, 0, 0f);
+            playingAttackStateHash = playbackHashes[0];
+            waitingForAttackState = true;
+            playingAttack = true;
+            commandBuffer.Clear();
+        }
+
+        private void UpdateDirectAttackPlayback()
+        {
+            if (!playingAttack || animator == null) return;
+
+            AnimatorStateInfo current = animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo next = animator.GetNextAnimatorStateInfo(0);
+
+            if (waitingForAttackState)
+            {
+                if (current.fullPathHash == playingAttackStateHash || next.fullPathHash == playingAttackStateHash)
+                    waitingForAttackState = false;
+                return;
+            }
+
+            if (!animator.IsInTransition(0) && queuedComboSteps > 0 &&
+                current.normalizedTime >= comboAdvanceNormalizedTime &&
+                activeComboIndex + 1 < activeComboStateHashes.Length)
+            {
+                activeComboIndex++;
+                queuedComboSteps--;
+                playingAttackStateHash = activeComboStateHashes[activeComboIndex];
+                Log($"コンボ{activeComboIndex + 1}段目を直接再生。");
+                animator.CrossFadeInFixedTime(playingAttackStateHash, attackFadeDuration, 0, 0f);
+                waitingForAttackState = true;
+                return;
+            }
+
+            // 通常攻撃01のように内部で1段目→2段目→3段目へ進む場合も、
+            // 最後に到達した非ループステートの終了を待ってLocomotionへ戻す。
+            if (animator.IsInTransition(0) || current.normalizedTime < 0.98f)
+                return;
+
+            int locomotionHash = Animator.StringToHash(locomotionStateName);
+            if (animator.HasState(0, locomotionHash))
+                animator.CrossFadeInFixedTime(locomotionHash, attackFadeDuration, 0, 0f);
+            else
+                LogError($"攻撃終了後のステート '{locomotionStateName}' が見つかりません。");
+
+            playingAttack = false;
+            waitingForAttackState = false;
+            activeSkillId = string.Empty;
+            activeComboStateHashes = new int[0];
+            activeComboIndex = 0;
+            queuedComboSteps = 0;
+        }
+
+        private void Log(string message)
+        {
+            if (showDebugLog) Debug.Log($"[NECTO Attack Test] {message}", this);
+        }
+
+        private void LogError(string message)
+        {
+            if (showDebugLog) Debug.LogError($"[NECTO Attack Test] {message}", this);
+        }
+
+        private NectoSkillMasterStateSMB FindRegisteredSkillBehaviour(string skillId)
+        {
+            foreach (NectoSkillMasterStateSMB behaviour in animator.GetBehaviours<NectoSkillMasterStateSMB>())
+                if (behaviour != null && behaviour.SkillId == skillId) return behaviour;
+            return null;
+        }
+
+        public void RefreshAnimator()
+        {
+            animator = null;
+            foreach (Animator candidate in GetComponentsInChildren<Animator>(true))
+            {
+                if (!candidate.enabled || !candidate.gameObject.activeInHierarchy) continue;
+                animator = candidate;
+                break;
+            }
+        }
+
+        private bool IsAnimatorActive()
+        {
+            return animator != null && animator.enabled && animator.gameObject.activeInHierarchy;
+        }
+
+        private void OnValidate()
+        {
+            commandTimeout = Mathf.Max(0.05f, commandTimeout);
+            attackFadeDuration = Mathf.Max(0f, attackFadeDuration);
+            comboAdvanceNormalizedTime = Mathf.Clamp(comboAdvanceNormalizedTime, 0.1f, 0.95f);
+        }
+    }
+}
