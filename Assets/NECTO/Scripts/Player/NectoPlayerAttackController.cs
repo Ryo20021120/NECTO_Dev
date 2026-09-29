@@ -1,4 +1,5 @@
 using System.Text;
+using Necto.Battle;
 using Necto.Data;
 using Necto.Skills;
 using Necto.UI;
@@ -45,6 +46,7 @@ namespace Necto.Player
         private bool playingAttack;
         private string activeSkillId = string.Empty;
         private int queuedComboSteps;
+        private NectoDebugSkillData queuedNextSkill;
 
         public string LastCommand { get; private set; } = string.Empty;
         public string LastSkillId { get; private set; } = string.Empty;
@@ -64,7 +66,13 @@ namespace Necto.Player
             if (Time.unscaledTime - lastInputTime > commandTimeout)
                 commandBuffer.Clear();
 
-            if (NectoFieldPartyHud.InputCaptured || NectoPlayerDodgeController.IsDodging) return;
+            if (NectoSummonBattle.InputLocked ||
+                NectoFieldPartyHud.InputCaptured ||
+                NectoPlayerDodgeController.IsDodging)
+            {
+                commandBuffer.Clear();
+                return;
+            }
 
             Gamepad gamepad = Gamepad.current;
             if (gamepad == null) return;
@@ -199,6 +207,16 @@ namespace Necto.Player
                 return;
             }
 
+            if (playingAttack)
+            {
+                // 別技は現在のモーションを中断せず、攻撃終了後に1つだけ発動する。
+                // 攻撃中にさらに別コマンドを完成させた場合は、最後に入力した技で予約を更新する。
+                queuedNextSkill = skill;
+                Log($"⑧ 次の技を予約: {skill.DisplayName} / ID={skill.SkillId}");
+                commandBuffer.Clear();
+                return;
+            }
+
             string stateName = registeredBehaviour.AnimatorStateName;
             if (string.IsNullOrWhiteSpace(stateName))
             {
@@ -241,16 +259,25 @@ namespace Necto.Player
             if (animator.IsInTransition(0) || current.normalizedTime < 0.98f)
                 return;
 
+            NectoDebugSkillData nextSkill = queuedNextSkill;
+            queuedNextSkill = null;
+            playingAttack = false;
+            waitingForAttackState = false;
+            activeSkillId = string.Empty;
+            queuedComboSteps = 0;
+
+            if (nextSkill != null)
+            {
+                Log($"⑨ 現在の攻撃終了。予約技を開始: {nextSkill.DisplayName}");
+                PlaySkill(nextSkill);
+                return;
+            }
+
             int locomotionHash = Animator.StringToHash(locomotionStateName);
             if (animator.HasState(0, locomotionHash))
                 animator.CrossFadeInFixedTime(locomotionHash, attackFadeDuration, 0, 0f);
             else
                 LogError($"攻撃終了後のステート '{locomotionStateName}' が見つかりません。");
-
-            playingAttack = false;
-            waitingForAttackState = false;
-            activeSkillId = string.Empty;
-            queuedComboSteps = 0;
         }
 
         /// <summary>Animatorのコンボ受付Behaviourから呼び出し、1回分の先行入力を消費する。</summary>

@@ -1,4 +1,5 @@
 using System.Collections;
+using Necto.Battle;
 using Necto.Input;
 using Necto.UI;
 using UnityEngine;
@@ -46,7 +47,10 @@ namespace Necto.Player
         private void Update()
         {
             if (!IsAnimatorActive()) RefreshAnimator();
-            if (NectoFieldPartyHud.InputCaptured || IsDodging || Time.time < nextDodgeTime) return;
+            if (NectoSummonBattle.InputLocked ||
+                NectoFieldPartyHud.InputCaptured ||
+                IsDodging ||
+                Time.time < nextDodgeTime) return;
 
             Gamepad gamepad = Gamepad.current;
             Keyboard keyboard = Keyboard.current;
@@ -73,8 +77,7 @@ namespace Necto.Player
             IsDodging = true;
             nextDodgeTime = Time.time + dodgeDuration + cooldown;
 
-            if (animator != null)
-                animator.CrossFadeInFixedTime(dodgeStateName, transitionDuration);
+            TryCrossFadeState(dodgeStateName);
 
             float elapsed = 0f;
             float speed = dodgeDistance / dodgeDuration;
@@ -97,8 +100,7 @@ namespace Necto.Player
                 yield return null;
             }
 
-            if (animator != null && animator.enabled)
-                animator.CrossFadeInFixedTime(locomotionStateName, transitionDuration);
+            TryCrossFadeState(locomotionStateName);
 
             IsDodging = false;
             dodgeRoutine = null;
@@ -131,6 +133,17 @@ namespace Necto.Player
         private bool IsAnimatorActive()
         {
             return animator != null && animator.enabled && animator.gameObject.activeInHierarchy;
+        }
+
+        private void TryCrossFadeState(string stateName)
+        {
+            if (!IsAnimatorActive() || string.IsNullOrWhiteSpace(stateName)) return;
+
+            const int baseLayer = 0;
+            int stateHash = Animator.StringToHash(stateName);
+            if (!animator.HasState(baseLayer, stateHash)) return;
+
+            animator.CrossFadeInFixedTime(stateHash, transitionDuration, baseLayer);
         }
 
         private void OnDisable()

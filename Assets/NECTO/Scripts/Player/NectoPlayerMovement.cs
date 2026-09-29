@@ -1,3 +1,4 @@
+using Necto.Battle;
 using Necto.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -80,7 +81,8 @@ namespace Necto.Player
 
         private Vector2 ReadMoveInput()
         {
-            if (NectoFieldPartyHud.InputCaptured ||
+            if (NectoSummonBattle.InputLocked ||
+                NectoFieldPartyHud.InputCaptured ||
                 NectoPlayerDodgeController.IsDodging ||
                 (attackController != null && attackController.MovementLocked))
                 return Vector2.zero;

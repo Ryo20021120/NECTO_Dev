@@ -1,5 +1,6 @@
 using Necto.Animation;
 using Necto.Prototype;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,8 +74,6 @@ namespace Necto.UI
             foreach (MonoBehaviour behaviour in model.GetComponentsInChildren<MonoBehaviour>(true))
                 behaviour.enabled = false;
             model.SetActive(true);
-            foreach (Renderer renderer in model.GetComponentsInChildren<Renderer>(true))
-                renderer.enabled = true;
             SetLayer(model.transform, PreviewLayer);
             NectoCharacterVisualUtility.RepairMaterials(model);
             if (autoFrameCharacter) FitAndFrame(model);
@@ -119,7 +118,45 @@ namespace Necto.UI
 
         private void FitAndFrame(GameObject target)
         {
-            Renderer[] renderers = target.GetComponentsInChildren<Renderer>(true);
+            Animator animator = target.GetComponentInChildren<Animator>(true);
+            if (animator != null && animator.isHuman)
+            {
+                animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                animator.Rebind();
+                animator.Update(0f);
+
+                Transform head = animator.GetBoneTransform(HumanBodyBones.Head);
+                Transform hips = animator.GetBoneTransform(HumanBodyBones.Hips);
+                Transform leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+                Transform rightFoot = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+                Transform leftToes = animator.GetBoneTransform(HumanBodyBones.LeftToes);
+                Transform rightToes = animator.GetBoneTransform(HumanBodyBones.RightToes);
+                if (head != null && hips != null && leftFoot != null && rightFoot != null)
+                {
+                    float soleY;
+                    if (leftToes != null && rightToes != null)
+                        soleY = Mathf.Min(leftToes.position.y, rightToes.position.y) - animator.humanScale * .05f;
+                    else
+                        soleY = Mathf.Min(leftFoot.position.y, rightFoot.position.y) - animator.humanScale * .15f;
+
+                    float topY = head.position.y + animator.humanScale * .28f;
+                    float humanoidHeight = Mathf.Max(.5f, topY - soleY);
+                    Vector3 bodyCenter = new Vector3(hips.position.x, (topY + soleY) * .5f, hips.position.z);
+                    target.transform.position += stage.transform.position - bodyCenter;
+                    bodyCenter = stage.transform.position;
+                    previewCamera.orthographicSize = humanoidHeight * .58f / Mathf.Max(.1f, framingScale);
+                    previewCamera.transform.position = bodyCenter + Vector3.forward * 6f;
+                    previewCamera.transform.LookAt(bodyCenter);
+                    return;
+                }
+            }
+
+            Renderer[] renderers = target.GetComponentsInChildren<Renderer>(false)
+                .Where(renderer => renderer.enabled &&
+                    !(renderer is ParticleSystemRenderer) &&
+                    !(renderer is TrailRenderer) &&
+                    !(renderer is LineRenderer))
+                .ToArray();
             if (renderers.Length == 0)
             {
                 Debug.LogWarning($"NECTO: プレビュー対象 {target.name} にRendererがありません。", target);
