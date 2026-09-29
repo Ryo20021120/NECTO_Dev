@@ -103,7 +103,7 @@ namespace Necto.UI
 
             if (texts.Length == 1)
             {
-                texts[0].text = $"{skill.Command}    {skill.DisplayName}";
+                texts[0].text = skill.DisplayName;
                 return;
             }
 
@@ -120,7 +120,8 @@ namespace Necto.UI
 
             commandText ??= texts[0];
             nameText ??= texts.Length > 1 ? texts[1] : texts[0];
-            commandText.text = skill.Command;
+            // コマンドは左側のA/B/X/Yアイコンで表示するため、文字は重複表示しない。
+            commandText.text = string.Empty;
             nameText.text = skill.DisplayName;
         }
 
