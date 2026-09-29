@@ -3683,6 +3683,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterSkillDatabase: {fileID: 11400000, guid: 48780fe2b84344e68568ebcc6d428061, type: 2}
   itemTemplate: {fileID: 6231160822593862358}
+  buttonA: {fileID: -342568965, guid: b9c9faaf18f8940ef9d904243c59b072, type: 3}
+  buttonB: {fileID: -1758005759, guid: d84b60c1148614e06ac134f6746c9c09, type: 3}
+  buttonX: {fileID: -120733829, guid: 78bc4337b014d4160a84c22b30ba6b59, type: 3}
+  buttonY: {fileID: 650123296, guid: 6038b995cb88e41178c995b9d3c6a466, type: 3}
 --- !u!114 &240738947874982880
 MonoBehaviour:
   m_ObjectHideFlags: 0

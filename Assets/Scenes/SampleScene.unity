@@ -329,13 +329,20 @@ MonoBehaviour:
   target: {fileID: 0}
   findPlayerAutomatically: 1
   positionOffset: {x: 0, y: 6.32, z: -5.7}
-  lookAtOffset: {x: 0, y: 4, z: 0}
+  lookAtOffset: {x: 0, y: 2.2, z: 0}
+  shoulderOffset: 0.35
   orbitSpeed: 120
   minimumPitch: 5
   maximumPitch: 65
   invertVertical: 0
   positionSmoothTime: 0.05
   rotationSharpness: 12
+  avoidObstacles: 1
+  cameraRadius: 0.25
+  collisionPadding: 0.12
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,7 +1426,6 @@ MonoBehaviour:
   commandTimeout: 0.55
   attackFadeDuration: 0.08
   locomotionStateName: Base Layer.Locomotion
-  comboAdvanceNormalizedTime: 0.55
   animator: {fileID: 0}
   showDebugLog: 1
 --- !u!114 &1274293518
@@ -1434,7 +1440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7765b0f8fc704cfcb57e1706493da1a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dodgeDistance: 4
+  dodgeDistance: 2.25
   dodgeDuration: 0.45
   cooldown: 0.3
   rotationSpeed: 24
@@ -1463,6 +1469,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1721012925266077441, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2521795411705731574, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
       propertyPath: m_Height
       value: 5.89
@@ -1486,6 +1496,10 @@ PrefabInstance:
     - target: {fileID: 2637932856551831931, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2743987398881428229, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2892103751028955247, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1539,9 +1553,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3334602535913290256, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284258897715710897, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5254920940048377052, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
       propertyPath: m_Name
       value: 02 Playable Characters
+      objectReference: {fileID: 0}
+    - target: {fileID: 5841808639446493004, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197925688929762041, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6974110750478718302, guid: 4a233b1b577a545c3bb4808875ef8d97, type: 3}
       propertyPath: m_LocalScale.x

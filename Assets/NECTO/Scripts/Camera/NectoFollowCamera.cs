@@ -5,7 +5,7 @@ using Necto.Input;
 namespace Necto.CameraSystem
 {
     /// <summary>
-    /// キャラクターとの距離を保ちながら、遅れて滑らかに追従するカメラ。
+    /// Starter Assets風の追従ピボットを使う三人称カメラ。
     /// target が未指定の場合は Player タグのオブジェクトを自動検出する。
     /// </summary>
     [DisallowMultipleComponent]
@@ -19,6 +19,7 @@ namespace Necto.CameraSystem
         [Header("構図")]
         [SerializeField] private Vector3 positionOffset = new Vector3(0f, 4.5f, -7f);
         [SerializeField] private Vector3 lookAtOffset = new Vector3(0f, 1.5f, 0f);
+        [SerializeField] private float shoulderOffset = 0.35f;
 
         [Header("右スティックカメラ")]
         [Min(0f)]
@@ -33,11 +34,21 @@ namespace Necto.CameraSystem
         [Min(0f)]
         [SerializeField] private float rotationSharpness = 12f;
 
+        [Header("壁との衝突")]
+        [SerializeField] private bool avoidObstacles = true;
+        [Min(0.01f)]
+        [SerializeField] private float cameraRadius = 0.25f;
+        [Min(0f)]
+        [SerializeField] private float collisionPadding = 0.12f;
+        [SerializeField] private LayerMask collisionLayers = ~0;
+
         private Vector3 followVelocity;
+        private Vector3 smoothedPivot;
         private float orbitYaw;
         private float orbitPitch;
         private float orbitDistance;
         private bool orbitInitialized;
+        private readonly RaycastHit[] collisionHits = new RaycastHit[12];
 
         public Transform Target => target;
 
@@ -49,6 +60,7 @@ namespace Necto.CameraSystem
         private void OnEnable()
         {
             followVelocity = Vector3.zero;
+            if (target != null) smoothedPivot = target.position + lookAtOffset;
         }
 
         private void LateUpdate()
@@ -60,9 +72,17 @@ namespace Necto.CameraSystem
             }
 
             UpdateOrbitInput();
-            Vector3 orbitOffset = Quaternion.Euler(orbitPitch, orbitYaw, 0f)
-                * Vector3.back * orbitDistance;
-            Vector3 desiredPosition = target.position + orbitOffset;
+            Vector3 targetPivot = target.position + lookAtOffset;
+            float pivotBlend = positionSmoothTime <= 0f
+                ? 1f
+                : 1f - Mathf.Exp(-Time.deltaTime / Mathf.Max(0.0001f, positionSmoothTime));
+            smoothedPivot = Vector3.Lerp(smoothedPivot, targetPivot, pivotBlend);
+
+            Quaternion orbitRotation = Quaternion.Euler(orbitPitch, orbitYaw, 0f);
+            Vector3 orbitOffset = orbitRotation *
+                (Vector3.right * shoulderOffset + Vector3.back * orbitDistance);
+            Vector3 desiredPosition = smoothedPivot + orbitOffset;
+            desiredPosition = ResolveObstacleCollision(smoothedPivot, desiredPosition);
             transform.position = positionSmoothTime <= 0f
                 ? desiredPosition
                 : Vector3.SmoothDamp(
@@ -71,7 +91,7 @@ namespace Necto.CameraSystem
                     ref followVelocity,
                     positionSmoothTime);
 
-            Vector3 lookDirection = target.position + lookAtOffset - transform.position;
+            Vector3 lookDirection = smoothedPivot - transform.position;
             if (lookDirection.sqrMagnitude <= Mathf.Epsilon) return;
 
             Quaternion desiredRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
@@ -90,22 +110,62 @@ namespace Necto.CameraSystem
 
             if (snapImmediately && target != null)
             {
-                Vector3 orbitOffset = Quaternion.Euler(orbitPitch, orbitYaw, 0f)
-                    * Vector3.back * orbitDistance;
-                transform.position = target.position + orbitOffset;
-                transform.LookAt(target.position + lookAtOffset);
+                smoothedPivot = target.position + lookAtOffset;
+                Vector3 orbitOffset = Quaternion.Euler(orbitPitch, orbitYaw, 0f) *
+                    (Vector3.right * shoulderOffset + Vector3.back * orbitDistance);
+                transform.position = ResolveObstacleCollision(smoothedPivot, smoothedPivot + orbitOffset);
+                transform.LookAt(smoothedPivot);
             }
         }
 
         private void InitializeOrbit()
         {
-            Vector3 offset = positionOffset;
+            // positionOffsetはTarget原点基準の旧設定なので、
+            // 上半身ピボット基準のオフセットへ変換する。
+            Vector3 offset = positionOffset - lookAtOffset - Vector3.right * shoulderOffset;
             orbitDistance = Mathf.Max(0.1f, offset.magnitude);
             float horizontalDistance = new Vector2(offset.x, offset.z).magnitude;
             orbitYaw = Mathf.Atan2(-offset.x, -offset.z) * Mathf.Rad2Deg;
             orbitPitch = Mathf.Atan2(offset.y, horizontalDistance) * Mathf.Rad2Deg;
             orbitPitch = Mathf.Clamp(orbitPitch, minimumPitch, maximumPitch);
             orbitInitialized = true;
+        }
+
+        private Vector3 ResolveObstacleCollision(Vector3 pivot, Vector3 desiredPosition)
+        {
+            if (!avoidObstacles) return desiredPosition;
+
+            Vector3 direction = desiredPosition - pivot;
+            float distance = direction.magnitude;
+            if (distance <= Mathf.Epsilon) return desiredPosition;
+            direction /= distance;
+
+            int hitCount = Physics.SphereCastNonAlloc(
+                pivot,
+                cameraRadius,
+                direction,
+                collisionHits,
+                distance,
+                collisionLayers,
+                QueryTriggerInteraction.Ignore);
+
+            float nearestDistance = distance;
+            for (int i = 0; i < hitCount; i++)
+            {
+                Collider hitCollider = collisionHits[i].collider;
+                if (hitCollider == null || IsPartOfTarget(hitCollider.transform)) continue;
+                nearestDistance = Mathf.Min(nearestDistance, collisionHits[i].distance);
+            }
+
+            if (nearestDistance >= distance) return desiredPosition;
+            float safeDistance = Mathf.Max(0.05f, nearestDistance - collisionPadding);
+            return pivot + direction * safeDistance;
+        }
+
+        private bool IsPartOfTarget(Transform candidate)
+        {
+            if (target == null || candidate == null) return false;
+            return candidate == target || candidate.IsChildOf(target) || target.IsChildOf(candidate);
         }
 
         private void UpdateOrbitInput()
@@ -134,6 +194,8 @@ namespace Necto.CameraSystem
             positionSmoothTime = Mathf.Max(0f, positionSmoothTime);
             rotationSharpness = Mathf.Max(0f, rotationSharpness);
             orbitSpeed = Mathf.Max(0f, orbitSpeed);
+            cameraRadius = Mathf.Max(0.01f, cameraRadius);
+            collisionPadding = Mathf.Max(0f, collisionPadding);
             maximumPitch = Mathf.Max(minimumPitch, maximumPitch);
         }
     }

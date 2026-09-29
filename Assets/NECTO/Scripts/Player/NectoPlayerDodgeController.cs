@@ -13,14 +13,15 @@ namespace Necto.Player
     public sealed class NectoPlayerDodgeController : MonoBehaviour
     {
         [Header("回避")]
-        [Min(0.1f)] [SerializeField] private float dodgeDistance = 4f;
+        [Tooltip("左スティックの倒し方に関係なく、1回の回避で移動する距離。")]
+        [Min(0.1f)] [SerializeField] private float dodgeDistance = 2.25f;
         [Min(0.05f)] [SerializeField] private float dodgeDuration = 0.45f;
         [Min(0f)] [SerializeField] private float cooldown = 0.3f;
         [Min(0f)] [SerializeField] private float rotationSpeed = 24f;
 
         [Header("Animatorステート")]
         [SerializeField] private string dodgeStateName = "Base Layer.Dodge";
-        [SerializeField] private string locomotionStateName = "Base Layer.Locamotion";
+        [SerializeField] private string locomotionStateName = "Base Layer.Locomotion";
         [Min(0f)] [SerializeField] private float transitionDuration = 0.06f;
 
         [Header("参照（通常は自動取得）")]
@@ -79,7 +80,9 @@ namespace Necto.Player
             float speed = dodgeDistance / dodgeDuration;
             while (elapsed < dodgeDuration)
             {
-                elapsed += Time.deltaTime;
+                // 最後のフレームでdodgeDistanceを超えないよう残り時間に制限する。
+                float stepTime = Mathf.Min(Time.deltaTime, dodgeDuration - elapsed);
+                elapsed += stepTime;
 
                 if (rotationSpeed > 0f)
                 {
@@ -89,7 +92,7 @@ namespace Necto.Player
                 }
 
                 if (characterController != null && characterController.enabled)
-                    characterController.Move(direction * speed * Time.deltaTime);
+                    characterController.Move(direction * speed * stepTime);
 
                 yield return null;
             }

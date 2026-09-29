@@ -31,10 +31,6 @@ namespace Necto.Player
         [Tooltip("攻撃終了後に戻るステート。")]
         [SerializeField] private string locomotionStateName = "Base Layer.Locomotion";
 
-        [Tooltip("次の攻撃を予約済みの場合、現在のモーションのどの位置で次段へ進むか。")]
-        [Range(0.1f, 0.95f)]
-        [SerializeField] private float comboAdvanceNormalizedTime = 0.55f;
-
         [Header("参照（通常は自動取得）")]
         [SerializeField] private Animator animator;
 
@@ -48,12 +44,11 @@ namespace Necto.Player
         private bool waitingForAttackState;
         private bool playingAttack;
         private string activeSkillId = string.Empty;
-        private int[] activeComboStateHashes = new int[0];
-        private int activeComboIndex;
         private int queuedComboSteps;
 
         public string LastCommand { get; private set; } = string.Empty;
         public string LastSkillId { get; private set; } = string.Empty;
+        public bool MovementLocked => playingAttack;
 
         private void Awake()
         {
@@ -196,51 +191,33 @@ namespace Necto.Player
                 return;
             }
 
-            string stateName = registeredBehaviour.AnimatorStateName;
-            string[] registeredComboStates = registeredBehaviour.ComboAnimatorStateNames;
-            bool hasComboStates = registeredComboStates != null && registeredComboStates.Length > 0;
-
-            if (playingAttack && activeSkillId == skill.SkillId && activeComboStateHashes.Length > 1)
+            if (playingAttack && activeSkillId == skill.SkillId)
             {
-                int remainingSteps = activeComboStateHashes.Length - 1 - activeComboIndex - queuedComboSteps;
-                if (remainingSteps > 0)
-                {
-                    queuedComboSteps++;
-                    Log($"⑧ コンボ先行入力受付: 次は{activeComboIndex + queuedComboSteps + 1}段目");
-                }
-                else
-                {
-                    Log("⑧ 最終段まで入力予約済みです。");
-                }
+                queuedComboSteps = Mathf.Min(queuedComboSteps + 1, 2);
+                Log($"⑧ コンボ先行入力受付: {queuedComboSteps}回分");
                 commandBuffer.Clear();
                 return;
             }
 
-            if (!hasComboStates && string.IsNullOrWhiteSpace(stateName))
+            string stateName = registeredBehaviour.AnimatorStateName;
+            if (string.IsNullOrWhiteSpace(stateName))
             {
                 LogError($"⑦ 再生失敗: ID '{skill.SkillId}' のBehaviourにAnimator State Nameが未入力です。");
                 return;
             }
 
-            string[] playbackStates = hasComboStates ? registeredComboStates : new[] { stateName };
-            int[] playbackHashes = new int[playbackStates.Length];
-            for (int i = 0; i < playbackStates.Length; i++)
+            int stateHash = Animator.StringToHash(stateName);
+            if (!animator.HasState(0, stateHash))
             {
-                playbackHashes[i] = Animator.StringToHash(playbackStates[i]);
-                if (string.IsNullOrWhiteSpace(playbackStates[i]) || !animator.HasState(0, playbackHashes[i]))
-                {
-                    LogError($"⑦ 再生失敗: Animatorにステート '{playbackStates[i]}' が見つかりません。");
-                    return;
-                }
+                LogError($"⑦ 再生失敗: Animatorにステート '{stateName}' が見つかりません。");
+                return;
             }
 
             activeSkillId = skill.SkillId;
-            activeComboStateHashes = playbackHashes;
-            activeComboIndex = 0;
             queuedComboSteps = 0;
-            Log($"⑦ 直接再生: {playbackStates[0]} / 全{playbackStates.Length}段");
-            animator.CrossFadeInFixedTime(playbackHashes[0], attackFadeDuration, 0, 0f);
-            playingAttackStateHash = playbackHashes[0];
+            Log($"⑦ 技の開始Stateを再生: {stateName}");
+            animator.CrossFadeInFixedTime(stateHash, attackFadeDuration, 0, 0f);
+            playingAttackStateHash = stateHash;
             waitingForAttackState = true;
             playingAttack = true;
             commandBuffer.Clear();
@@ -260,21 +237,7 @@ namespace Necto.Player
                 return;
             }
 
-            if (!animator.IsInTransition(0) && queuedComboSteps > 0 &&
-                current.normalizedTime >= comboAdvanceNormalizedTime &&
-                activeComboIndex + 1 < activeComboStateHashes.Length)
-            {
-                activeComboIndex++;
-                queuedComboSteps--;
-                playingAttackStateHash = activeComboStateHashes[activeComboIndex];
-                Log($"コンボ{activeComboIndex + 1}段目を直接再生。");
-                animator.CrossFadeInFixedTime(playingAttackStateHash, attackFadeDuration, 0, 0f);
-                waitingForAttackState = true;
-                return;
-            }
-
-            // 通常攻撃01のように内部で1段目→2段目→3段目へ進む場合も、
-            // 最後に到達した非ループステートの終了を待ってLocomotionへ戻す。
+            // 次段への切り替えはAnimator TransitionとNectoComboInputStateSMBが担当する。
             if (animator.IsInTransition(0) || current.normalizedTime < 0.98f)
                 return;
 
@@ -287,9 +250,17 @@ namespace Necto.Player
             playingAttack = false;
             waitingForAttackState = false;
             activeSkillId = string.Empty;
-            activeComboStateHashes = new int[0];
-            activeComboIndex = 0;
             queuedComboSteps = 0;
+        }
+
+        /// <summary>Animatorのコンボ受付Behaviourから呼び出し、1回分の先行入力を消費する。</summary>
+        public bool TryConsumeQueuedComboInput()
+        {
+            if (!playingAttack || queuedComboSteps <= 0) return false;
+
+            queuedComboSteps--;
+            Log($"コンボ入力をAnimator Transitionへ渡しました。残り予約={queuedComboSteps}");
+            return true;
         }
 
         private void Log(string message)
@@ -329,7 +300,6 @@ namespace Necto.Player
         {
             commandTimeout = Mathf.Max(0.05f, commandTimeout);
             attackFadeDuration = Mathf.Max(0f, attackFadeDuration);
-            comboAdvanceNormalizedTime = Mathf.Clamp(comboAdvanceNormalizedTime, 0.1f, 0.95f);
         }
     }
 }

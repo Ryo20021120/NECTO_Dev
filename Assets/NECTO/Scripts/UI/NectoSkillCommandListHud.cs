@@ -21,6 +21,12 @@ namespace Necto.UI
         [Tooltip("Skill Command List直下にあるUI項目の1つを登録します。")]
         [SerializeField] private GameObject itemTemplate;
 
+        [Header("コマンドボタン画像")]
+        [SerializeField] private Sprite buttonA;
+        [SerializeField] private Sprite buttonB;
+        [SerializeField] private Sprite buttonX;
+        [SerializeField] private Sprite buttonY;
+
         private readonly List<GameObject> generatedItems = new List<GameObject>();
         private bool prepared;
 
@@ -88,8 +94,10 @@ namespace Necto.UI
                 LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
         }
 
-        private static void ConfigureItem(GameObject item, NectoDebugSkillData skill)
+        private void ConfigureItem(GameObject item, NectoDebugSkillData skill)
         {
+            ConfigureCommandButtons(item, skill.Command);
+
             TMP_Text[] texts = item.GetComponentsInChildren<TMP_Text>(true);
             if (texts.Length == 0) return;
 
@@ -114,6 +122,49 @@ namespace Necto.UI
             nameText ??= texts.Length > 1 ? texts[1] : texts[0];
             commandText.text = skill.Command;
             nameText.text = skill.DisplayName;
+        }
+
+        private void ConfigureCommandButtons(GameObject item, string command)
+        {
+            // テンプレートのボタン欄は、A画像を6枚並べた状態で作られている。
+            // LayoutGroupの階層に依存せず、登録済みのボタンSpriteを持つImageだけを拾う。
+            List<Image> icons = new List<Image>();
+            foreach (Image image in item.GetComponentsInChildren<Image>(true))
+            {
+                if (IsCommandButtonSprite(image.sprite))
+                    icons.Add(image);
+            }
+
+            if (icons.Count == 0) return;
+
+            string normalizedCommand = (command ?? string.Empty).Trim().ToUpperInvariant();
+            for (int i = 0; i < icons.Count; i++)
+            {
+                bool used = i < normalizedCommand.Length;
+                icons[i].gameObject.SetActive(used);
+                if (!used) continue;
+
+                Sprite sprite = GetButtonSprite(normalizedCommand[i]);
+                if (sprite != null) icons[i].sprite = sprite;
+            }
+        }
+
+        private bool IsCommandButtonSprite(Sprite sprite)
+        {
+            return sprite != null &&
+                   (sprite == buttonA || sprite == buttonB || sprite == buttonX || sprite == buttonY);
+        }
+
+        private Sprite GetButtonSprite(char command)
+        {
+            switch (command)
+            {
+                case 'A': return buttonA;
+                case 'B': return buttonB;
+                case 'X': return buttonX;
+                case 'Y': return buttonY;
+                default: return null;
+            }
         }
 
         private void ClearGeneratedItems()

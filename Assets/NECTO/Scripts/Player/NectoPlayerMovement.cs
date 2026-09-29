@@ -31,11 +31,13 @@ namespace Necto.Player
         [SerializeField] private Animator animator;
 
         private CharacterController characterController;
+        private NectoPlayerAttackController attackController;
         private float verticalVelocity;
 
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
+            attackController = GetComponent<NectoPlayerAttackController>();
 
             RefreshAnimator();
 
@@ -76,9 +78,11 @@ namespace Necto.Player
             UpdateAnimator(moveInput, isGrounded);
         }
 
-        private static Vector2 ReadMoveInput()
+        private Vector2 ReadMoveInput()
         {
-            if (NectoFieldPartyHud.InputCaptured || NectoPlayerDodgeController.IsDodging)
+            if (NectoFieldPartyHud.InputCaptured ||
+                NectoPlayerDodgeController.IsDodging ||
+                (attackController != null && attackController.MovementLocked))
                 return Vector2.zero;
 
             Vector2 input = NectoGamepadInput.ReadLeftStick(Gamepad.current);
